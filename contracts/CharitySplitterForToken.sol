@@ -6,6 +6,11 @@ import "./interfaces/IERC677Receiver.sol";
 import "./tokens/ERC677.sol";
 import "./libraries/Bytes.sol";
 
+/*
+*  @title: CharitySplitterForToken
+*  @dev: Extends CharitySplitter to allow for the donation and distribution of
+*        ERC677 tokens.
+*/
 contract CharitySplitterForToken is CharitySplitter, ICharitySplitterForToken, IERC677Receiver {
 
     using Bytes for bytes;

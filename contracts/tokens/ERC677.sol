@@ -5,6 +5,10 @@ import "../interfaces/IERC677.sol";
 import "../interfaces/IERC677Receiver.sol";
 import "../libraries/Address.sol";
 
+/*
+*  @title: ERC677
+*  @dev: Implements the ERC677 token standard.
+*/
 contract ERC677 is ERC20Mintable, IERC677 {
 
     using Address for address;
@@ -16,6 +20,9 @@ contract ERC677 is ERC20Mintable, IERC677 {
         bytes data
     );
 
+    /*
+    * @dev: Modifier which checks recipient validity.
+    */
     modifier validRecipient(
         address _recipient
     )
@@ -27,47 +34,41 @@ contract ERC677 is ERC20Mintable, IERC677 {
         _;
     }
 
-    // function superTransfer(
-    //     address _to,
-    //     uint256 _value
-    // )
-    //     public
-    //     returns(bool)
-    // {
-    //     return super.transfer(
-    //         _to,
-    //         _value
-    //     );
-    // }
-
+    /**
+      * @dev transfer function which informs contract recipients of asset transfers
+      * @param  _receiver      intended recipient of the transfer
+      * @param  _amount        amount of tokens to be transferred
+      * @param  _data          data payload containing the token contract address
+      * @return                bool indicating if the transfer was successful
+    */
     function transferAndCall(
-        IERC677Receiver receiver,
-        uint amount,
-        bytes calldata data
+        IERC677Receiver _receiver,
+        uint _amount,
+        bytes calldata _data
     )
         external
-        validRecipient(address(receiver))
+        validRecipient(address(_receiver))
         returns (bool)
     {
         // Transfer the tokens to the intended recipient
         require(
-            transfer(address(receiver), amount),
+            transfer(address(_receiver), _amount),
             "ERC20 token transfer failed."
         );
 
         // If the recipient is a contract, call tokenFallback()
-        if(address(receiver).isContract()) {
+        if(address(_receiver).isContract()) {
             require(
-                receiver.tokenFallback(msg.sender, amount, data),
+                _receiver.tokenFallback(msg.sender, _amount, _data),
                 "Token fallback failed."
             );
         }
 
         emit Transfer(
             msg.sender,
-            address(receiver),
-            amount,
-            data
+            address(_receiver),
+            _amount,
+            _data
         );
 
         return true;

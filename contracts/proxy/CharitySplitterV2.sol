@@ -1,43 +1,15 @@
 pragma solidity ^0.5.0;
 
-import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./libraries/Address.sol";
-import "./interfaces/ICharitySplitter.sol";
+import "./CharitySplitterData.sol";
+import "../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "../libraries/Address.sol";
 
-/*
-*  @title: CharitySplitter
-*  @dev: CharitySplitter allows for the equal distribution of donations
-*        amongst a dynamic set of charities. The contract's owner controls
-*        the charity set and is empowered to add or remove charities.
-*/
-contract CharitySplitter is ICharitySplitter {
+contract CharitySplitterV2 is CharitySplitterData {
 
     using SafeMath for uint256;
     using Address for address;
-
-    address public owner;
-    uint256 public charityCount;
-    mapping(address => uint256) public charityIndex;
-    mapping(uint256 => address payable) public charities;
-
-    event LogCharityAdded(
-        address _charity,
-        uint256 _totalCharities
-    );
-
-    event LogCharityRemoved(
-        address _charity,
-        uint256 _totalCharities
-    );
-
-    event LogDonation(
-        address _philanthropist,
-        uint256 _totalDonationAmount,
-        uint256 _totalCharities,
-        uint256 _individualDonationAmount
-    );
-
-    /*
+    
+   /*
     * @dev: Modifier which restricts access to the owner.
     */
     modifier onlyOwner()
@@ -59,18 +31,6 @@ contract CharitySplitter is ICharitySplitter {
             "Cannot process donation as there are no active charities."
         );
         _;
-    }
-
-    /*
-    * @dev: Constructor calls init for proxy deployment optimizations
-    */
-    constructor(
-        address _owner
-    )
-        public
-    {
-        charityCount = 0;
-        owner = _owner;
     }
 
     /*

@@ -222,7 +222,7 @@ contract("CharitySplitter", function(accounts) {
       afterCharityThreeBalance.should.be.equal(
         expectedCharityThreeBalance.toString()
       );
-      // NOTE: using toString() here as a workaround for BigNumber issue https://github.com/MikeMcl/bignumber.js/issues/11
+      // NOTE: using toString() here due to https://github.com/MikeMcl/bignumber.js/issues/11
     });
 
     it("should process uneven donations and distribute them to each respective charity", async function() {

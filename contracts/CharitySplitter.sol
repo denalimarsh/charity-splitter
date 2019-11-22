@@ -24,10 +24,12 @@ contract CharitySplitter is ICharitySplitter {
         address _charity,
         uint256 _totalCharities
     );
+
     event LogCharityRemoved(
         address _charity,
         uint256 _totalCharities
     );
+    
     event LogDonation(
         address _philanthropist,
         uint256 _totalDonationAmount,
@@ -35,7 +37,7 @@ contract CharitySplitter is ICharitySplitter {
         uint256 _individualDonationAmount
     );
 
- /*
+    /*
     * @dev: Modifier which restricts access to the owner.
     */
     modifier onlyOwner()
@@ -43,6 +45,18 @@ contract CharitySplitter is ICharitySplitter {
         require(
             msg.sender == owner,
             'Must be the owner.'
+        );
+        _;
+    }
+
+    /*
+    * @dev: Modifier which limit donations if there are no active charities.
+    */
+    modifier hasActiveCharities()
+    {
+        require(
+            charityCount > 0,
+            "Cannot process donation as there are no active charities."
         );
         _;
     }
@@ -65,6 +79,7 @@ contract CharitySplitter is ICharitySplitter {
     function()
         external
         payable
+        hasActiveCharities
     {
         processDonation();
     }
@@ -144,11 +159,6 @@ contract CharitySplitter is ICharitySplitter {
     function processDonation()
         internal
     {
-        require(
-            charityCount > 0,
-            "Cannot process donation as there are no active charities."
-        );
-
         require(
             msg.value > charityCount,
             "Value doesn't meet minimum donation threshold of 1 wei per charity."

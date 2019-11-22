@@ -1,16 +1,16 @@
 pragma solidity ^0.5.0;
 
 import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./Address.sol";
+import "./libraries/Address.sol";
+import "./interfaces/ICharitySplitter.sol";
 
-   /*
-    *  @title: CharitySplitter
-    *  @dev: CharitySplitter allows for the equal distribution of donations
-    *        amongst a dynamic set of charities. The contract's owner controls
-    *        the charity set and is empowered to add or remove charities.
-    */
-
-contract CharitySplitter {
+/*
+*  @title: CharitySplitter
+*  @dev: CharitySplitter allows for the equal distribution of donations
+*        amongst a dynamic set of charities. The contract's owner controls
+*        the charity set and is empowered to add or remove charities.
+*/
+contract CharitySplitter is ICharitySplitter {
 
     using SafeMath for uint256;
     using Address for address;

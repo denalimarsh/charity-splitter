@@ -1,6 +1,6 @@
 # Argent assessment
 
-## 1. CharitySplitter contract
+## 1. CharitySplitter
 
 Primary contract: `CharitySplitter.sol`. I used dual-mapping pattern in order to iterate over the charities at time of donation distribution. After charity removal the most recently added charity is swapped into the position of the removed charity in order to keep the mappings correctly updated. Additionally, I leveraged a custom version of OpenZeppelin's `Address.sol` library.
 
@@ -26,7 +26,7 @@ Primary contract: `CharitySplitter.sol`. I used dual-mapping pattern in order to
       ✓ should log an event upon successful donation processing (38ms)
 ```
 
-## 2. CharitySplitterFactory contract
+## 2. CharitySplitterFactory
 
 Primary contract: `CharitySplitterFactory.sol`. The factory uses a straight-forward `createCharitySplitter(_owner)` method and tracks users who have deployed CharitySplitter contracts in a simple `mapping(address => bool)`.
 
@@ -47,7 +47,7 @@ Primary contract: `CharitySplitterFactory.sol`. The factory uses a straight-forw
       ✓ should process donations and distribute them to each respective charity (82ms)
 ```
 
-## 3. CharitySplitterForToken contract
+## 3. CharitySplitterForToken
 
 Primary contracts: `CharitySplitterForToken.sol`, `ERC677.sol`. The contract implements the required `tokenFallback(...)` which allows for the automatic processing of received donations. The ERC677 token's deployed contract address is passed via the `bytes memory data` parameter and parsed by the `Bytes.sol` library.
 
@@ -62,11 +62,11 @@ Primary contracts: `CharitySplitterForToken.sol`, `ERC677.sol`. The contract imp
       ✓ should automatically process donations of ERC677 tokens and distribute them equally to active charities (121ms)
 ```
 
-## 4. CharitySplitterFactoryV2 contract
+## 4. CharitySplitterFactoryV2
 
 Primary contracts: `CharitySplitterFactoryV2.sol`, `/proxy` directory. In order to reduce the gas deployment costs I leveraged a delegate proxy contract architecture with storage and logic concerns separated into different subcontracts. `CharitySplitterV2.sol` contains contract logic while `CharitySplitterData.sol`, `CharitySplitterEvents.sol`, and `CharitySplitterGlobal.sol` contain contract events and global variables. The contract's constructor has been moved to `CharitySplitterProxy.sol`, which manages the initial state.
 
-test_charitySplitterFactoryV2.js`:
+`test_charitySplitterFactoryV2.js`:
 
 ```
   Contract: CharitySplitterFactoryV2

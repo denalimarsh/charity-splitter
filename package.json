@@ -11,7 +11,7 @@
     "babel-register": "^6.23.0",
     "bignumber.js": "^5.0.0",
     "dotenv": "^5.0.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "openzeppelin-solidity": "^2.0.0",
     "sha3": "^1.2.2",
     "truffle-assertions": "^0.3.1",
